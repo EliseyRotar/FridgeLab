@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frigorifero e consumi elettrici</title>
+    <meta name="description" content="Modello interattivo per studiare come il tempo di apertura della porta del frigorifero influisce sui consumi elettrici e sulle emissioni di CO₂.">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="container py-4">
+        <header class="text-center mb-5">
+            <h1 class="display-6 fw-bold mb-3">Frigorifero domestico e consumi elettrici ⚡</h1>
+            <p class="lead text-muted mb-4">Un piccolo modello per capire quanto incide lasciare la porta aperta del frigo</p>
+            
+            <!-- Frigorifero 3D interattivo -->
+            <div class="fridge-container">
+                <div class="fridge" id="fridge3d" onclick="toggleFridge()">
+                    <div class="fridge-body">
+                        <div class="fridge-door" id="fridgeDoor">
+                            <div class="fridge-handle"></div>
+                        </div>
+                        <div class="fridge-freezer"></div>
+                        <div class="fridge-light"></div>
+                    </div>
+                    <div class="cold-air" id="coldAir">
+                        <div class="cold-particle"></div>
+                        <div class="cold-particle"></div>
+                        <div class="cold-particle"></div>
+                        <div class="cold-particle"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Indicatori visivi -->
+            <div class="d-flex justify-content-center align-items-center flex-wrap mb-3">
+                <div class="temperature-display">
+                    🌡️ Temperatura: <span id="tempDisplay">4°C</span>
+                </div>
+                <div class="energy-meter">
+                    <div class="energy-fill" id="energyFill"></div>
+                </div>
+                <div class="temperature-display">
+                    ⚡ Consumo: <span id="consumoDisplay">0.90 kWh</span>
+                </div>
+            </div>
+            
+            <!-- Nuvole CO2 -->
+            <div class="co2-container">
+                <div class="co2-cloud">
+                    <div class="cloud small"></div>
+                </div>
+                <div class="co2-cloud">
+                    <div class="cloud"></div>
+                </div>
+                <div class="co2-cloud">
+                    <div class="cloud large"></div>
+                </div>
+            </div>
+            
+            <p class="small text-muted">💡 Clicca sul frigo per aprire la porta!</p>
+        </header>
+
+        <main>
+            <section class="mb-4" aria-label="Contesto e spiegazione del modello">
+                <div class="alert alert-info" role="alert">
+                    <strong>Perché ci interessa:</strong> più tempo teniamo aperta la porta del frigo, più energia serve per riportarlo in temperatura.
+                    Con questo modello possiamo vedere come cambiano i consumi giornalieri e stimare l'impatto sulla CO₂.
+                </div>
+                
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <code class="d-block fs-5 fw-semibold">f(x) = 0.90 + 0.006x + 0.00012x² − 0.000001x³</code>
+                        <small class="text-muted">dove x è il numero di minuti al giorno con la porta aperta e f(x) il consumo in kWh/giorno</small>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="row g-4 mb-4" aria-label="Grafico e tabella dei valori calcolati">
+                <div class="col-lg-7">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-body-secondary">
+                            <h2 class="h5 mb-0">Grafico dei consumi</h2>
+                        </div>
+                        <div class="card-body chart-wrapper">
+                            <canvas id="grafico" aria-label="Grafico dei consumi del frigorifero al variare del tempo di apertura" role="img"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-5">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-body-secondary">
+                            <h2 class="h5 mb-0">Valori calcolati dal modello</h2>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table id="tabellaValori" class="table table-striped table-hover mb-0">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th scope="col">x (min)</th>
+                                            <th scope="col">f(x) (kWh)</th>
+                                            <th scope="col">ΔConsumi (%)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabellaBody">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="card shadow-sm mb-4" aria-label="Controlli del modello">
+                <div class="card-body row gy-3 align-items-center">
+                    <div class="col-lg-6">
+                        <label for="xValue" class="form-label fw-semibold mb-1">Scegli un tempo di apertura (in minuti al giorno):</label>
+                        <input type="number" id="xValue" class="form-control" min="0" max="90" value="30">
+                    </div>
+                    <div class="col-lg-6 d-flex flex-wrap gap-2">
+                        <button type="button" class="btn btn-primary" onclick="calcolaValore()">Calcola</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="resetGrafico()">Reset</button>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="card border-success-subtle mb-4 d-none" id="statsBox" aria-live="polite" aria-label="Risultati del calcolo">
+                <div class="card-header bg-success-subtle">
+                    <h2 class="h5 text-success mb-0">Risultati stimati</h2>
+                </div>
+                <div class="card-body row row-cols-1 row-cols-md-2 g-3">
+                    <div class="col">
+                        <p class="mb-1 text-uppercase text-muted fw-semibold">Tempo di apertura</p>
+                        <p class="fs-5 mb-0"><span id="statX">--</span> min/giorno</p>
+                    </div>
+                    <div class="col">
+                        <p class="mb-1 text-uppercase text-muted fw-semibold">Consumo giornaliero stimato</p>
+                        <p class="fs-5 mb-0"><span id="statY">--</span> kWh</p>
+                    </div>
+                    <div class="col">
+                        <p class="mb-1 text-uppercase text-muted fw-semibold">Δ rispetto a uso attento</p>
+                        <p class="fs-5 mb-0"><span id="statDelta">--</span> %</p>
+                    </div>
+                    <div class="col">
+                        <p class="mb-1 text-uppercase text-muted fw-semibold">CO₂ giornaliera (stima)</p>
+                        <p class="fs-5 mb-0"><span id="statCO2">--</span> kg/giorno</p>
+                    </div>
+                    <div class="col">
+                        <p class="mb-1 text-uppercase text-muted fw-semibold">CO₂ annuale (stima)</p>
+                        <p class="fs-5 mb-0"><span id="statCO2Year">--</span> kg/anno</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer class="text-center text-muted small border-top pt-3">
+            <p class="mb-1"><strong>Nota:</strong> il fattore di emissione usato è 0,477 kg CO₂ per kWh (stima media per l'Italia).</p>
+            <p class="mb-0">Attività svolta per Matematica e TPS, all'interno di un percorso su energia e sostenibilità.</p>
+        </footer>
+    </main>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

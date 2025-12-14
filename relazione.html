@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relazione - Modello del Frigorifero</title>
+    <style>
+        body{font-family:'Georgia',serif;line-height:1.5;color:#1f1f1f;background:#f7f7f7;padding:24px;}
+        .container{max-width:820px;margin:0 auto;background:#fff;padding:32px 40px;border:1px solid #ddd;}
+        h1{font-size:2em;text-align:center;margin-bottom:6px;}
+        h2{font-size:1.3em;margin:22px 0 10px 0;color:#234;font-weight:bold;}
+        p{margin-bottom:10px;text-align:justify;}
+        ul{margin:0 0 10px 18px;}
+        table{width:100%;border-collapse:collapse;margin:12px 0;font-size:0.95em;}
+        th,td{border:1px solid #aaa;padding:6px;text-align:center;}
+        .formula{background:#fff9e3;border-left:4px solid #f0a500;padding:10px;margin:12px 0;font-family:"Courier New",monospace;text-align:center;}
+        .note{background:#eef6ff;border-left:4px solid #5b8def;padding:10px;margin:12px 0;}
+        .todo{border:1px dashed #9c9c9c;padding:10px;margin:12px 0;}
+        .footer{margin-top:24px;font-size:0.9em;text-align:center;}
+        @media print{
+            body{background:#fff;padding:0;}
+            .container{border:none;padding:30px;}
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Modello del frigorifero: consumi, grafici e sostenibilità</h1>
+        <p style="text-align:center;font-size:0.95em;">
+            Disciplina: Matematica &amp; TPS &mdash; Classe: 4° IT &mdash; Studente: ________________________
+        </p>
+
+        <h2>1. Situazione di partenza e obiettivi</h2>
+        <p>
+            In questa relazione analizzo il consumo energetico giornaliero di un frigorifero in funzione
+            dei minuti di apertura della porta, all’interno di una campagna di sensibilizzazione sul
+            risparmio energetico promossa da un comune italiano. L’idea è mostrare come un gesto
+            quotidiano apparentemente banale, come tenere il frigorifero aperto per troppo tempo,
+            possa avere conseguenze misurabili sui consumi elettrici e sulle emissioni di CO₂.
+        </p>
+        <p>
+            Gli obiettivi principali sono: collegare una variabile reale (i minuti di porta aperta al
+            giorno) al consumo del frigorifero, descrivere qualitativamente l’andamento della funzione
+            che modella il fenomeno, rappresentare il modello con un grafico digitale e riflettere su
+            quali abitudini domestiche risultino più sostenibili dal punto di vista ambientale.
+        </p>
+
+        <h2>2. Il modello matematico</h2>
+        <div class="formula">
+            f(x) = 0,90 + 0,006x + 0,00012x² − 0,000001x³<br>
+            con x ∈ [0,90] minuti/giorno e f(x) in kWh/giorno
+        </div>
+        <p>
+            Il termine 0,90 rappresenta il consumo base del frigorifero a porta sempre chiusa
+            (compressore, dispersioni, componenti elettroniche). Il termine lineare 0,006x indica che
+            ogni minuto di apertura porta a un aumento proporzionale di consumo, mentre il termine
+            quadratico 0,00012x² descrive l’effetto cumulativo degli scambi d’aria caldo–freddo.
+            Infine il termine cubico −0,000001x³ introduce un effetto di saturazione: oltre un certo
+            tempo l’interno si scalda molto e l’incremento dei consumi cresce più lentamente.
+        </p>
+
+        <h2>3. Tabella dati essenziali</h2>
+        <p>
+            Nella tabella seguente riporto alcuni valori significativi della funzione f(x) e una stima
+            delle emissioni giornaliere di CO₂, usando il fattore medio italiano 0,477 kg CO₂/kWh.
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>x (min)</th>
+                    <th>f(x) kWh</th>
+                    <th>Δ% su 0 min</th>
+                    <th>CO₂ giorn. (kg)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>0</td><td>0,900</td><td>0</td><td>0,43</td></tr>
+                <tr><td>15</td><td>0,999</td><td>11</td><td>0,48</td></tr>
+                <tr><td>30</td><td>1,086</td><td>21</td><td>0,52</td></tr>
+                <tr><td>45</td><td>1,161</td><td>29</td><td>0,55</td></tr>
+                <tr><td>60</td><td>1,272</td><td>41</td><td>0,61</td></tr>
+                <tr><td>75</td><td>1,357</td><td>51</td><td>0,65</td></tr>
+                <tr><td>90</td><td>1,428</td><td>59</td><td>0,68</td></tr>
+            </tbody>
+        </table>
+        <p style="font-size:0.85em;">
+            Si osserva che passando da 0 a 90 minuti di apertura il consumo aumenta di circa il 59&nbsp;%
+            e le emissioni giornaliere crescono da circa 0,43 kg a circa 0,68 kg di CO₂.
+        </p>
+
+        <h2>4. Grafico digitale del modello</h2>
+        <p>
+            In laboratorio ho realizzato una pagina web con Chart.js (`frigorifero_modello.html`)
+            in cui ho definito l’array dei minuti x = [0,10,...,90] e la funzione f(x) in JavaScript,
+            ottenendo un grafico a linea del consumo giornaliero in kWh in funzione dei minuti di
+            porta aperta. Il grafico mostra una curva crescente che inizialmente cresce quasi in modo
+            lineare e poi tende a incurvarsi, evidenziando l’effetto dei termini di grado superiore.
+            Come supporto ho anche utilizzato l’immagine `frigorifero_analisi.png` con l’andamento
+            completo del modello.
+        </p>
+
+        <h2>5. Analisi qualitativa dell’andamento</h2>
+        <p>
+            Nell’intervallo 0–30 minuti l’aumento di f(x) è moderato e quasi proporzionale a x,
+            mentre tra 30 e 60 minuti la crescita diventa più marcata a causa del termine quadratico.
+            Oltre i 60 minuti la funzione continua a crescere ma con un ritmo leggermente più lento,
+            perché il termine cubico negativo attenua l’aumento: il frigorifero tende a saturarsi
+            termicamente e ogni minuto aggiuntivo produce un effetto sempre meno “conveniente”
+            dal punto di vista energetico.
+        </p>
+        <p>
+            Considerando i dati e il grafico, ritengo accettabili valori di x intorno ai 20–30
+            minuti al giorno, che comportano un aumento di consumo intorno al 20&nbsp;% rispetto
+            alla porta sempre chiusa. Valori superiori ai 60 minuti al giorno appaiono invece
+            eccessivi e indicano comportamenti poco attenti all’uso dell’elettrodomestico.
+        </p>
+
+        <h2>6. Educazione civica e sostenibilità</h2>
+        <p>
+            Le abitudini che aumentano inutilmente i minuti di apertura del frigorifero sono, ad
+            esempio, aprirlo senza sapere cosa prendere, lasciarlo aperto mentre si cucina, tornare
+            più volte di seguito per prendere singoli alimenti o dimenticare la porta semiaperta.
+            Al contrario, buone pratiche sono decidere prima cosa prendere, organizzare bene gli
+            alimenti, evitare di inserire cibi ancora caldi e controllare periodicamente lo stato
+            delle guarnizioni e la temperatura impostata (circa 3–5&nbsp;°C).
+        </p>
+        <p>
+            Questo lavoro si collega direttamente all’Obiettivo 7 dell’Agenda 2030, che promuove
+            un uso efficiente e responsabile dell’energia, e all’Obiettivo 13, che invita a ridurre
+            le emissioni climalteranti. Anche se il frigorifero è solo un singolo apparecchio,
+            moltiplicare questi risparmi per milioni di famiglie significa evitare ogni anno molte
+            tonnellate di CO₂, contribuendo concretamente alla lotta contro il cambiamento climatico.
+        </p>
+
+        <h2>7. Impegni personali e conclusione</h2>
+        <p>
+            A partire da questa analisi mi impegno a ridurre il tempo totale di apertura del
+            frigorifero mantenendolo intorno ai 20 minuti al giorno, a verificare il corretto stato
+            delle guarnizioni e a sensibilizzare i miei familiari su queste buone pratiche. Il
+            modello studiato mostra come la matematica permetta di tradurre comportamenti quotidiani
+            in numeri e grafici, rendendo visibile un impatto che normalmente non percepiamo.
+        </p>
+        <p>
+            In conclusione, aprire meno e meglio il frigorifero significa consumare meno energia,
+            emettere meno CO₂ e avvicinarsi a uno stile di vita più sostenibile. Si tratta di un
+            piccolo gesto individuale che, se condiviso da molti, può avere effetti positivi sul
+            piano collettivo e ambientale.
+        </p>
+
+        <div class="footer">
+            Allegati: `frigorifero_modello.html`, `frigorifero_dati.csv`, `frigorifero_analisi.png`.
+        </div>
+    </div>
+</body>
+</html>
